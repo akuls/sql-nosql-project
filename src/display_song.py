@@ -115,10 +115,10 @@ def get_song_info(song_path):
         if res.__class__.__name__ == 'ndarray':
             print getter[4:]+": shape =",res.shape
         else:
-            data[getter[4:]] = res
+            data[getter[4:]] = str(res)
             #print getter[4:]+":",res
 
-    pickle.dump(data, open("../song_data//" + data['pickle_id'] + ".p", "wb"))
+    pickle.dump(data, open("..\data\song_data\\" + data['pickle_id'] + ".p", "wb"))
     print "Done: ", data['pickle_id']
     h5.close()
 
