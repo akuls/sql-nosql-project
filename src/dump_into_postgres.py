@@ -8,6 +8,7 @@ import utils
 import pickle
 import os
 import sys
+import time
 
 CREATE_TABLES = ".\static\create_all_tables.txt"
 DATA = "..\data\song_data\\"
@@ -33,7 +34,11 @@ def build_tables(conn):
 
 	for command in content:
 		try:
+			table_beg = time.clock()
 			cur.execute(command)
+			table_end = time.clock()
+
+			print "%s took %fs " %(command, (table_end-table_beg) )
 		except:
 			print "Failed on: ", command
 			cur.close()
@@ -54,10 +59,12 @@ def insert_into_all_tables(conn, artist_dict, track_id, track_basic, track_tech,
 
 	print "Populating tables now"
 	cur = conn.cursor()
+	print "Average insertion time in seconds"
 
 	'''
 	Artist identity table and artist info needs to have the same unique number of artists/IDs. Hence, derive the basic info using the artist_dict
 	'''
+	artist_table_beg = time.clock()
 	for key in artist_dict.keys():
 		
 		#Artist identity table
@@ -70,28 +77,40 @@ def insert_into_all_tables(conn, artist_dict, track_id, track_basic, track_tech,
 		query = "INSERT into artist_info VALUES(" + song['artist_id'] + "," + song['artist_mbid'] + "," + song['artist_name'] + "," + \
 			song['artist_familiarity'] + "," + song['artist_hotttnesss'] + "," + song['artist_latitude'] + "," + song['artist_location'] + "," + song['artist_longitude'] + ")"
 		run(cur, query)
+	artist_table_end = time.clock()
 
 	print 'All artist data populated!'
+	print 'Artist data: ', ((artist_table_end - artist_table_beg)*1000.0)/( float(len(artist_dict.keys()))*2.0 )
 	'''
 	Traverse the rest of the sets and insert into respective tables
 	'''
-
+	track_identity_beg = time.clock()
 	for query in track_id:
 		run(cur, query)
+	track_identity_end = time.clock()
+	print 'Track identity data: ', ((track_identity_end - track_identity_beg)*1000.0)/float(len(track_id))
 
+	track_basic_beg = time.clock()
 	for query in track_basic:
 		run(cur, query)
+	track_basic_end = time.clock()
+	print 'Track identity data: ', ((track_basic_end - track_basic_beg)*1000.0)/float(len(track_basic))
 
+	track_tech_beg = time.clock()
 	for query in track_tech:
 		run(cur, query)
+	track_tech_end = time.clock()
+	print 'Track technical data: ', ((track_tech_end - track_tech_beg)*1000.0)/float(len(track_tech))
 
 	print 'All track data populated!'
 
+	sang_beg = time.clock()
 	for query in sang:
 		run(cur, query)
+	sang_end = time.clock()
+	print 'Artist data: ', ((sang_end - sang_beg)*1000.0)/float(len(sang))
 
 	print 'All sang data populated!'
-
 	cur.close()
 	pass
 
