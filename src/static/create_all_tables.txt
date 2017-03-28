@@ -1,0 +1,7 @@
+CREATE SCHEMA public
+CREATE TABLE artist_identity(id text, playmeid int, digi_7id int, mbid text, PRIMARY KEY(id, mbid))
+CREATE TABLE artist_info(id text, mbid text, name text, familiarity float, hottness float, latitude float, location text, longitude float, PRIMARY KEY(id, mbid), FOREIGN KEY (id, mbid) REFERENCES artist_identity(id, mbid))
+CREATE TABLE track_identity(track_id text, song_id text, audio_md5 text, release_7digitalid int, track_7digitalid int, PRIMARY KEY(track_id, song_id))
+CREATE TABLE track_basic_info(track_id text, song_id text, release text, title text, duration float, year int, PRIMARY KEY(track_id, song_id), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id))
+CREATE TABLE track_tech_info(track_id text, song_id text, song_hotttnesss float, danceability float, start_of_fade_out float, end_of_fade_in float, energy float, key int, key_confidence float, loudness float, mode int, mode_confidence float, tempo float, time_signature int, time_signature_confidence float, analysis_sample_rate float, PRIMARY KEY(track_id, song_id), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id))
+CREATE TABLE sang(id text, mbid	text, track_id text, song_id text, PRIMARY KEY(id, mbid, track_id, song_id), FOREIGN KEY (id, mbid) REFERENCES artist_identity(id, mbid), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id))
