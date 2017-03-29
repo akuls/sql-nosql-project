@@ -1,0 +1,20 @@
+Connected to DB successfully!
+CREATE SCHEMA public took 2.322169ms
+CREATE TABLE artist_identity(id text, playmeid int, digi_7id int, mbid text, PRIMARY KEY(id, mbid)) took 32.849331ms
+CREATE TABLE artist_info(id text, mbid text, name text, familiarity float, hottness float, latitude float, location text, longitude float, PRIMARY KEY(id, mbid), FOREIGN KEY (id, mbid) REFERENCES artist_identity(id, mbid)) took 34.669772ms
+CREATE TABLE track_identity(track_id text, song_id text, audio_md5 text, release_7digitalid int, track_7digitalid int, PRIMARY KEY(track_id, song_id)) took 29.739015ms
+CREATE TABLE track_basic_info(track_id text, song_id text, release text, title text, duration float, year int, PRIMARY KEY(track_id, song_id), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id)) took 31.656641ms
+CREATE TABLE track_tech_info(track_id text, song_id text, song_hotttnesss float, danceability float, start_of_fade_out float, end_of_fade_in float, energy float, key int, key_confidence float, loudness float, mode int, mode_confidence float, tempo float, time_signature int, time_signature_confidence float, analysis_sample_rate float, PRIMARY KEY(track_id, song_id), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id)) took 32.999059ms
+CREATE TABLE sang(id text, mbid text, track_id text, song_id text, PRIMARY KEY(id, mbid, track_id, song_id), FOREIGN KEY (id, mbid) REFERENCES artist_identity(id, mbid), FOREIGN KEY (track_id, song_id) REFERENCES track_identity(track_id, song_id)) took 31.270272ms
+All tables created!
+Populating tables now
+Average insertion time in milliseconds
+All artist data populated!
+Artist data:  1.22469922811
+Track identity data:  0.5566580438
+Track identity data:  0.644909637674
+Track technical data:  0.666181110232
+All track data populated!
+Artist data:  0.660653375758
+All sang data populated!
+All tables populated!
