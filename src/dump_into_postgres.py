@@ -181,7 +181,8 @@ def build_tables_and_populate_data():
 
 	conn = None
 	try:
-		conn = utils.connect_to_db('1m_song', 'postgres', 'localhost', 'akul')
+		#conn = utils.connect_to_db('1m_song', 'postgres', 'localhost', 'akul')
+		conn = utils.connect_to_db('1msongs_new', 'postgres', 'localhost', 'akul')
 
 		if(conn == None):
 			print "Connection to database failed. Please try again!"
@@ -204,4 +205,4 @@ def build_tables_and_populate_data():
 
 if __name__ == '__main__':
 	#build_tables_and_populate_data()
-	plot_basic_charts()
+	#plot_basic_charts()

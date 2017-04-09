@@ -18,7 +18,7 @@ def my_plot(val_list, x_label, y_label, title, fig_name):
 	                 color='b',
 	                 label=x_label)
 
-	plt.xlabel('TABLE NAME')
+	plt.xlabel(x_label)
 	plt.ylabel(y_label)
 	plt.title(title)
 	plt.xticks(index, ('', 'Artist_identity', 'Artist_info', 'Track_identity', 'Track_basic_info', 'Track_tech_info', 'Sang'))
