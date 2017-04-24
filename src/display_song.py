@@ -30,7 +30,10 @@ import hdf5_getters
 import numpy as np
 import pickle
 
-PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\data"
+XS_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b1_xs"
+S_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b2_s"
+M_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b3_m"
+L_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b4_l"
  
 def die_with_usage():
     """ HELP MENU """
@@ -70,7 +73,7 @@ def get_song_id(path):
     parts = parts[len(parts)-1].split(".")
     return parts[0]
 
-def get_song_info(song_path):
+def get_song_info(song_path, pickle_path):
 
     #Create a dictionary with fields and dump in pickle
     data = {}
@@ -118,22 +121,28 @@ def get_song_info(song_path):
             data[getter[4:]] = str(res)
             #print getter[4:]+":",res
 
-    pickle.dump(data, open("..\data\song_data\\" + data['pickle_id'] + ".p", "wb"))
+    pickle.dump(data, open(pickle_path + data['pickle_id'] + ".p", "wb"))
     print "Done: ", data['pickle_id']
     h5.close()
 
 
-if __name__ == '__main__':
-    # for dirname, dirnames, filenames in os.walk(PATH):
-    #     # print path to all subdirectories first.
-    #     # for subdirname in dirnames:
-    #     #     print(os.path.join(dirname, subdirname))
+def make_paths(filepath, fname, pickle_path):
+    
+    target = open(fname, 'w')
 
-    #     # print path to all filenames.
-    #     for filename in filenames:
-    #         print(os.path.join(dirname, filename))
+    for dirname, dirnames, filenames in os.walk(filepath):
+        # print path to all subdirectories first.
+        # for subdirname in dirnames:
+        #     print(os.path.join(dirname, subdirname))
 
-    with open("all_files.txt", 'r') as f:
+        # print path to all filenames.
+        for filename in filenames:
+            print(os.path.join(dirname, filename))
+            target.write(os.path.join(dirname, filename))
+            target.write("\n")
+    target.close()
+
+    with open(fname, 'r') as f:
             content = f.readlines()
 
     content = [x.strip() for x in content]
@@ -141,4 +150,18 @@ if __name__ == '__main__':
     #Iterate over each file path and get the song details
     count = 0
     for each_file in content:
-        get_song_info(each_file)
+        get_song_info(each_file, pickle_path)
+
+if __name__ == '__main__':
+
+    # print "XS"
+    # make_paths(XS_PATH, 'xs_files.txt', '..\data\\xs_song_data\\')
+    
+    # print "S"
+    # make_paths(S_PATH, 's_files.txt', '..\data\s_song_data\\')
+    
+    # print "M"
+    # make_paths(M_PATH, 'm_files.txt', '..\data\m_song_data\\')
+    
+    print "L"
+    make_paths(L_PATH, 'l_files.txt', '..\data\l_song_data\\')

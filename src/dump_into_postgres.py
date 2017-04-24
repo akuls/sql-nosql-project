@@ -9,10 +9,20 @@ import pickle
 import os
 import sys
 import time
-import plotting as pt 
+import plotting as pt
+import datetime as dt
 
 CREATE_TABLES = ".\static\create_all_tables.txt"
-DATA = "..\data\song_data\\"
+
+XS_DATA = "..\data\\xs_song_data\\"
+S_DATA = "..\data\s_song_data\\"
+M_DATA = "..\data\m_song_data\\"
+L_DATA = "..\data\l_song_data\\"
+
+XS = "1m_xs"
+S = "1m_s"
+M = "1m_m"
+L = "1m_l"
 
 def run(cur, query):
 
@@ -35,11 +45,11 @@ def build_tables(conn):
 
 	for command in content:
 		try:
-			table_beg = time.clock()
+			table_beg = dt.datetime.now()
 			cur.execute(command)
-			table_end = time.clock()
+			table_end = dt.datetime.now()
 
-			print "%s took %fs " %(command, (table_end-table_beg) )
+			print "%s took %fmilliseconds " %(command, (table_end-table_beg).microseconds/1000.0 )
 		except:
 			print "Failed on: ", command
 			cur.close()
@@ -56,66 +66,200 @@ def fix_format(song):
 	return new_song
 	pass
 
-def insert_into_all_tables(conn, artist_dict, track_id, track_basic, track_tech, sang):
+def time_queries(data, cur):
 
+	one = 0.0
+	one_c = 0
+	one_beg = 0.0
+	one_end = 0.0
+
+	ten = 0.0 
+	ten_c = 0
+	ten_beg = 0.0
+
+	hun = 0.0
+	hun_c = 0
+	hun_beg = 0.0
+
+	thou = 0.0
+	thou_c = 0
+	thou_beg = 0.0
+
+	ten_beg = hun_beg = thou_beg = dt.datetime.now()
+
+	for query in data:
+		
+		one_beg = dt.datetime.now()
+
+		run(cur, query)
+		
+		one_end = dt.datetime.now()
+		
+		one += (one_end - one_beg).microseconds
+		one_c += 1
+		
+
+		if(one_c%10 == 0):
+			ten += (one_end - ten_beg).microseconds
+			ten_c += 1
+			ten_beg = dt.datetime.now()
+
+		if(one_c%100 == 0):
+			hun += (one_end - hun_beg).microseconds
+			hun_c += 1
+			hun_beg = dt.datetime.now()
+
+		if(one_c%1000 == 0):
+			thou += (one_end - thou_beg).microseconds
+			thou_c += 1
+			thou_beg = dt.datetime.now()
+
+	times = []
+	times.append(float(one/float(one_c)))
+	times.append(float(ten/float(ten_c)))
+	times.append(float(hun/float(hun_c)))
+	times.append(float(thou/float(thou_c)))
+	times = [float(x/1000.0) for x in times]
+
+	return times
+	pass
+
+def insert_into_all_tables(conn, artist_dict, track_id, track_basic, track_tech, sang, data_path):
+
+	all_times = []
 	print "Populating tables now"
 	cur = conn.cursor()
-	print "Average insertion time in seconds"
+	print "Average insertion time in milli seconds"
 
 	'''
 	Artist identity table and artist info needs to have the same unique number of artists/IDs. Hence, derive the basic info using the artist_dict
 	'''
-	artist_table_beg = time.clock()
+	one = 0.0
+	one_c = 0
+	one_beg = 0.0
+	one_end = 0.0
+
+	ten = 0.0 
+	ten_c = 0
+	ten_beg = 0.0
+
+	hun = 0.0
+	hun_c = 0
+	hun_beg = 0.0
+
+	thou = 0.0
+	thou_c = 0
+	thou_beg = 0.0
+
+	one1 = 0.0
+	one_beg1 = 0.0
+	one_end1 = 0.0
+	ten1 = 0.0
+	ten_beg1 = 0.0
+	hun1 = 0.0
+	hun_beg1 = 0.0
+	thou1 = 0.0
+	thou_beg1 = 0.0
+
+	ten_beg = hun_beg = thou_beg = dt.datetime.now()
+
 	for key in artist_dict.keys():
 		
 		#Artist identity table
+		one_beg = dt.datetime.now()
+
 		run(cur, key)
 
+		one_end = dt.datetime.now()
+
+		one += (one_end - one_beg).microseconds
+		one_c += 1
+		
+		if(one_c%10 == 0):
+			ten += (one_end - ten_beg).microseconds
+			ten_c += 1
+			ten_beg = dt.datetime.now()
+
+		if(one_c%100 == 0):
+			hun += (one_end - hun_beg).microseconds
+			hun_c += 1
+			hun_beg = dt.datetime.now()
+
+		if(one_c%1000 == 0):
+			thou += (one_end - thou_beg).microseconds
+			thou_c += 1
+			thou_beg = dt.datetime.now()
+
+	artist_id = []
+	artist_id.append(float(one/float(one_c)))
+	artist_id.append(float(ten/float(ten_c)))
+	artist_id.append(float(hun/float(hun_c)))
+	artist_id.append(float(thou/float(thou_c)))
+	artist_id = [float(x/1000.0) for x in artist_id]
+
+	one_c = 0
+	ten_beg1 = hun_beg1 = thou_beg1 = dt.datetime.now()
+	for key in artist_dict.keys():
+
 		#Artist basic info table
-		song = pickle.load(open(DATA+artist_dict[key], "r"))
+		song = pickle.load(open(data_path+artist_dict[key], "r"))
 		song = fix_format(song)
 
 		query = "INSERT into artist_info VALUES(" + song['artist_id'] + "," + song['artist_mbid'] + "," + song['artist_name'] + "," + \
 			song['artist_familiarity'] + "," + song['artist_hotttnesss'] + "," + song['artist_latitude'] + "," + song['artist_location'] + "," + song['artist_longitude'] + ")"
+		
+		one_beg1 = dt.datetime.now()
 		run(cur, query)
-	artist_table_end = time.clock()
+		one_end1 = dt.datetime.now()
+
+		one1 += (one_end1 - one_beg1).microseconds
+		one_c += 1
+
+		if(one_c%10 == 0):
+			ten1 += (one_end1 - ten_beg1).microseconds
+			ten_beg1 = dt.datetime.now()
+
+		if(one_c%100 == 0):
+			hun1 += (one_end1 - hun_beg1).microseconds
+			hun_beg1 = dt.datetime.now()
+
+		if(one_c%1000 == 0):
+			thou1 += (one_end1 - thou_beg1).microseconds
+			thou_beg1 = dt.datetime.now()
+
+	artist_bas = []
+	artist_bas.append(float(one1/float(one_c)))
+	artist_bas.append(float(ten1/float(ten_c)))
+	artist_bas.append(float(hun1/float(hun_c)))
+	artist_bas.append(float(thou1/float(thou_c)))
+	artist_bas = [float(x/1000.0) for x in artist_bas]
 
 	print 'All artist data populated!'
-	print 'Artist data: ', ((artist_table_end - artist_table_beg)*1000.0)/( float(len(artist_dict.keys()))*2.0 )
+
+	all_times.append(artist_id)
+	all_times.append(artist_bas)
+	print all_times
 	'''
 	Traverse the rest of the sets and insert into respective tables
 	'''
-	track_identity_beg = time.clock()
-	for query in track_id:
-		run(cur, query)
-	track_identity_end = time.clock()
-	print 'Track identity data: ', ((track_identity_end - track_identity_beg)*1000.0)/float(len(track_id))
-
-	track_basic_beg = time.clock()
-	for query in track_basic:
-		run(cur, query)
-	track_basic_end = time.clock()
-	print 'Track identity data: ', ((track_basic_end - track_basic_beg)*1000.0)/float(len(track_basic))
-
-	track_tech_beg = time.clock()
-	for query in track_tech:
-		run(cur, query)
-	track_tech_end = time.clock()
-	print 'Track technical data: ', ((track_tech_end - track_tech_beg)*1000.0)/float(len(track_tech))
+	track_iden = time_queries(track_id, cur)
+	track_bas = time_queries(track_basic, cur)
+	track_tech = time_queries(track_tech, cur)
+	all_times.append(track_bas)
+	all_times.append(track_iden)
+	all_times.append(track_tech)
 
 	print 'All track data populated!'
-
-	sang_beg = time.clock()
-	for query in sang:
-		run(cur, query)
-	sang_end = time.clock()
-	print 'Sang data: ', ((sang_end - sang_beg)*1000.0)/float(len(sang))
+	sang_times = time_queries(sang, cur)
+	all_times.append(sang_times)
 
 	print 'All sang data populated!'
+
+	print all_times
 	cur.close()
 	pass
 
-def populate_data(conn):
+def populate_data(conn, data_path):
 
 	'''
 	Tables and their fields
@@ -139,11 +283,11 @@ def populate_data(conn):
 	track_tech_info_set = set()
 	sang_set = set()
 
-	song_list = os.listdir(DATA)
+	song_list = os.listdir(data_path)
 
 	for song_name in song_list:
 		#print song_name
-		song = pickle.load(open(DATA+song_name, "r"))
+		song = pickle.load(open(data_path+song_name, "r"))
 
 		song = fix_format(song)
 
@@ -164,7 +308,7 @@ def populate_data(conn):
 		#Sang
 		sang_set.add("INSERT into sang VALUES(" + song['artist_id']+ "," + song['artist_mbid'] + "," + song['track_id'] + "," + song['song_id'] + ")")
 
-	insert_into_all_tables(conn, artist_dict, track_identity_set, track_basic_info_set, track_tech_info_set, sang_set)
+	insert_into_all_tables(conn, artist_dict, track_identity_set, track_basic_info_set, track_tech_info_set, sang_set, data_path)
 	pass
 
 def plot_basic_charts():
@@ -177,12 +321,12 @@ def plot_basic_charts():
 	pt.my_plot(create_table, "Insertion time", "Microseconds", "INSERT query timings", "INSERT")
 
 	pass
-def build_tables_and_populate_data():
 
+def build_db(dbname, PATH):
+	
 	conn = None
 	try:
-		#conn = utils.connect_to_db('1m_song', 'postgres', 'localhost', 'akul')
-		conn = utils.connect_to_db('1msongs_new', 'postgres', 'localhost', 'akul')
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
 
 		if(conn == None):
 			print "Connection to database failed. Please try again!"
@@ -193,7 +337,7 @@ def build_tables_and_populate_data():
 			build_tables(conn)
 			print 'All tables created!'
 
-			populate_data(conn)
+			populate_data(conn, PATH)
 			print 'All tables populated!'
 			conn.commit()
 
@@ -203,6 +347,14 @@ def build_tables_and_populate_data():
 		if conn is not None:
 			conn.close()
 
+def build_tables_and_populate_data():
+
+	#build_db(XS, XS_DATA)
+	#build_db(S, S_DATA)
+	#build_db(M, M_DATA)
+	build_db(L, L_DATA)
+	# build_db(TEMP_DB, L_DATA)
+
 if __name__ == '__main__':
-	#build_tables_and_populate_data()
+	build_tables_and_populate_data()
 	#plot_basic_charts()

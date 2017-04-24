@@ -1,0 +1,68 @@
+Threads: 2
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 4
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 6
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 8
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 10
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 12
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Threads: 14
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+Connected to DB successfully!
+{'XS': {
+		2: array([ 13.4 ,  15.95]), 
+		4: array([ 21.20833333,  32.94166667]), 
+		6: array([ 32.32333333,  54.51333333]), 
+		8: array([ 43.95178571,  75.56071429]), 
+		10: array([ 54.17333333,  96.82666667]), 
+		12: array([  66.27121212,  118.90151515]), 
+		14: array([  77.49010989,  140.15384615])}, 
+'S': 
+		{
+		2: array([ 16.325,  23.1  ]), 
+		4: array([ 24.5375 ,  38.05625]), 
+		6: array([ 35.78611111,  59.06944444]), 
+		8: array([ 46.7328125,  79.553125 ]), 
+		10: array([  56.882,  100.849]), 
+		12: array([  69.08263889,  122.12916667]), 
+		14: array([  80.26173469,  142.80357143])}, 
+'M': {
+		2: array([ 18.35      ,  28.83333333]), 
+		4: array([ 28.115,  45.975]), 
+		6: array([ 39.63333333,  67.6952381 ]), 
+		8: array([ 50.21944444,  88.03333333]), 
+		10: array([  61.43363636,  109.33636364]), 
+		12: array([  72.9974359 ,  130.99166667]), 
+		14: array([  84.42      ,  150.98857143])}, 
+'L': {
+		2: array([ 19.7375,  35.275 ]), 
+		4: array([ 31.39166667,  55.77083333]), 
+		6: array([ 43.29375,  78.21875]), 
+		8: array([  53.655  ,  100.02625]), 
+		10: array([  65.6175    ,  121.81166667]), 
+		12: array([  77.21607143,  143.30892857]), 
+		14: array([  89.01964286,  163.72008929])}}
