@@ -1,4 +1,3 @@
-CREATE SCHEMA public
 CREATE TABLE artist_identity(id text, playmeid int, digi_7id int, mbid text, PRIMARY KEY(id, mbid))
 CREATE TABLE artist_info(id text, mbid text, name text, familiarity float, hottness float, latitude float, location text, longitude float, PRIMARY KEY(id, mbid), FOREIGN KEY (id, mbid) REFERENCES artist_identity(id, mbid))
 CREATE TABLE track_identity(track_id text, song_id text, audio_md5 text, release_7digitalid int, track_7digitalid int, PRIMARY KEY(track_id, song_id))

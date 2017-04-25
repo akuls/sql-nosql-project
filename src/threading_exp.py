@@ -14,6 +14,11 @@ S = "1m_s"
 M = "1m_m"
 L = "1m_l"
 
+XSd = "1m_xsd"
+Sd = "1m_sd"
+Md = "1m_md"
+Ld = "1m_ld"
+
 final_times = []
 ITERATION_LIMIT = 10
 all_data = {}
@@ -117,7 +122,7 @@ def update_times(conn):
 	return sum(times) / float(len(times))
 	pass
 
-def join_times(conn):
+def complex_join_times(conn):
 
 	cur = conn.cursor()
 	times = []
@@ -131,12 +136,115 @@ def join_times(conn):
 	return times
 	pass
 
+def basic_joins(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT ab.name from artist_info ab, artist_identity ai WHERE ai.mbid = ab.mbid AND ai.id = ab.id limit 50"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "SELECT tri.title from track_basic_info tri, track_identity ti WHERE tri.track_id = ti.track_id AND tri.song_id = ti.song_id limit 50"
+	times.append(get_avg_query_time(query, cur))
+
+	return times
+	pass
+
+def max_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT MAX(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def min_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT MIN(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def avg_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT AVG(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def sum_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT SUM(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def count_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT COUNT(ai.familiarity) from artist_info ai where ai.familiarity != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def delete_queries(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "DELETE FROM artist_identity WHERE mbid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM artist_info WHERE name IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM track_identity WHERE track_7digitalid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM track_basic_info WHERE title IS NULL"
+	times.append(get_avg_query_time(query, cur))
+	
+	query = "DELETE FROM track_tech_info WHERE song_hotttnesss='NaN'"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM sang WHERE mbid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	return sum(times) / float(len(times))
+	pass
+
 def run_all_exp(conn, ID):
+	
 	res = []
 	# res = select_times(conn)
 	# res.append(update_times(conn))
+	#res = complex_join_times(conn)
+	#res = basic_joins(conn
+	#res = max_queries(conn)
+	#res = min_queries(conn)
+	#res = avg_queries(conn)
+	#res = sum_queries(conn)
+	#res = count_queries(conn)
+	res = delete_queries(conn)
 
-	res = join_times(conn)
 	final_times.append(res)
 
 def create_threads_and_run(dbname, NUM_THREADS):
@@ -191,19 +299,19 @@ def test():
 		print "Threads:", NUM_THREADS
 		
 		final_times = []
-		create_threads_and_run(XS, NUM_THREADS)
+		create_threads_and_run(XSd, NUM_THREADS)
 		build_all_data('XS', NUM_THREADS)
 		
 		final_times = []
-		create_threads_and_run(S, NUM_THREADS)
+		create_threads_and_run(Sd, NUM_THREADS)
 		build_all_data('S', NUM_THREADS)
 		
 		final_times = []
-		create_threads_and_run(M, NUM_THREADS)
+		create_threads_and_run(Md, NUM_THREADS)
 		build_all_data('M', NUM_THREADS)
 		
 		final_times = []
-		create_threads_and_run(L, NUM_THREADS)
+		create_threads_and_run(Ld, NUM_THREADS)
 		build_all_data('L', NUM_THREADS)
 
 	print all_data

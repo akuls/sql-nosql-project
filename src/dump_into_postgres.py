@@ -24,6 +24,11 @@ S = "1m_s"
 M = "1m_m"
 L = "1m_l"
 
+XSd = "1m_xsd"
+Sd = "1m_sd"
+Md = "1m_md"
+Ld = "1m_ld"
+
 def run(cur, query):
 
 	try:
@@ -349,10 +354,10 @@ def build_db(dbname, PATH):
 
 def build_tables_and_populate_data():
 
-	#build_db(XS, XS_DATA)
-	#build_db(S, S_DATA)
-	#build_db(M, M_DATA)
-	build_db(L, L_DATA)
+	#build_db(XSd, XS_DATA)
+	#build_db(Sd, S_DATA)
+	#build_db(Md, M_DATA)
+	build_db(Ld, L_DATA)
 	# build_db(TEMP_DB, L_DATA)
 
 if __name__ == '__main__':

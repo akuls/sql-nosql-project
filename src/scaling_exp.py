@@ -12,6 +12,11 @@ S = "1m_s"
 M = "1m_m"
 L = "1m_l"
 
+XSd = "1m_xsd"
+Sd = "1m_sd"
+Md = "1m_md"
+Ld = "1m_ld"
+
 ITERATION_LIMIT = 10
 
 def get_avg_query_time(query, cur):
@@ -114,6 +119,29 @@ def update_times(conn):
 	pass
 
 def delete_times(conn):
+
+	cur = conn.cursor()
+	times = []
+
+	query = "DELETE FROM artist_identity WHERE mbid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM artist_info WHERE name IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM track_identity WHERE track_7digitalid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM track_basic_info WHERE title IS NULL"
+	times.append(get_avg_query_time(query, cur))
+	
+	query = "DELETE FROM track_tech_info WHERE song_hotttnesss='NaN'"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "DELETE FROM sang WHERE mbid IS NULL"
+	times.append(get_avg_query_time(query, cur))
+
+	return sum(times) / float(len(times))
 	pass
 
 def basic_queries(dbname):
@@ -150,7 +178,7 @@ def scale_data_basic_queries():
 
 	print xs_times, s_times, m_times, l_times
 
-def join_times(conn):
+def complex_join_times(conn):
 
 	cur = conn.cursor()
 	times = []
@@ -159,6 +187,20 @@ def join_times(conn):
 	times.append(get_avg_query_time(query, cur))
 
 	query = "SELECT tri.title from track_basic_info tri, track_identity ti WHERE tri.track_id = ti.track_id AND tri.song_id = ti.song_id AND tri.duration > 0 ORDER BY tri.duration ASC limit 50"
+	times.append(get_avg_query_time(query, cur))
+
+	return times
+	pass
+
+def basic_joins(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT ab.name from artist_info ab, artist_identity ai WHERE ai.mbid = ab.mbid AND ai.id = ab.id limit 50"
+	times.append(get_avg_query_time(query, cur))
+
+	query = "SELECT tri.title from track_basic_info tri, track_identity ti WHERE tri.track_id = ti.track_id AND tri.song_id = ti.song_id limit 50"
 	times.append(get_avg_query_time(query, cur))
 
 	return times
@@ -176,7 +218,8 @@ def join_queries(dbname):
 
 		else:
 			print "Connected to DB successfully!"
-			res = join_times(conn)
+			#res = complex_join_times(conn)
+			res = basic_joins(conn)
 			conn.commit()
 
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -196,6 +239,264 @@ def scale_data_join_queries():
 
 	print xs_times, s_times, m_times, l_times
 
+def run_max_queries(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT MAX(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def max_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = run_max_queries(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+
+def scale_max_queries():
+	
+	print 'Max Queries'
+	xs_times = max_queries(XS)
+	s_times = max_queries(S)
+	m_times = max_queries(M)
+	l_times = max_queries(L)
+
+	print xs_times, s_times, m_times, l_times
+
+
+def run_min_queries(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT MIN(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def min_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = run_min_queries(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+
+def scale_min_queries():
+	
+	print 'Min Queries'
+	xs_times = min_queries(XS)
+	s_times = min_queries(S)
+	m_times = min_queries(M)
+	l_times = min_queries(L)
+
+	print xs_times, s_times, m_times, l_times
+
+def run_avg_queries(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT AVG(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def avg_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = run_avg_queries(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+
+def scale_avg_queries():
+	
+	print 'Min Queries'
+	xs_times = avg_queries(XS)
+	s_times = avg_queries(S)
+	m_times = avg_queries(M)
+	l_times = avg_queries(L)
+
+	print xs_times, s_times, m_times, l_times
+
+def run_sum_queries(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT SUM(ai.familiarity + ai.hottness) from artist_info ai where ai.familiarity != 'NaN' AND ai.hottness != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def sum_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = run_sum_queries(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+
+def scale_sum_queries():
+	
+	print 'Sum Queries'
+	xs_times = sum_queries(XS)
+	s_times = sum_queries(S)
+	m_times = sum_queries(M)
+	l_times = sum_queries(L)
+
+	print xs_times, s_times, m_times, l_times
+
+def run_count_queries(conn):
+	
+	cur = conn.cursor()
+	times = []
+
+	query = "SELECT COUNT(ai.familiarity) from artist_info ai where ai.familiarity != 'NaN'"
+	times.append(get_avg_query_time(query, cur))
+	
+	return times
+	pass
+
+def count_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = run_count_queries(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+
+def scale_count_queries():
+	
+	print 'Count Queries'
+	xs_times = count_queries(XS)
+	s_times = count_queries(S)
+	m_times = count_queries(M)
+	l_times = count_queries(L)
+
+	print xs_times, s_times, m_times, l_times
+
+def scale_aggregate_queries():
+
+	#scale_max_queries()
+	#scale_min_queries()
+	#scale_avg_queries()
+	scale_sum_queries()
+	scale_count_queries()
+
+def delete_queries(dbname):
+
+	res = []
+	conn = None
+	try:
+		conn = utils.connect_to_db(dbname, 'postgres', 'localhost', 'akul')
+
+		if(conn == None):
+			print "Connection to database failed. Please try again!"
+
+		else:
+			print "Connected to DB successfully!"
+			res = delete_times(conn)
+			conn.commit()
+
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+	return res
+	pass
+
+def scale_delete_queries():
+
+	print 'Delete Queries'
+	xs_times = delete_queries(XSd)
+	s_times = delete_queries(Sd)
+	m_times = delete_queries(Md)
+	l_times = delete_queries(Ld)
+	
+	print xs_times, s_times, m_times, l_times
 if __name__ == '__main__':
 	#scale_data_basic_queries()
-	scale_data_join_queries()
+	#scale_data_join_queries()
+	#scale_aggregate_queries()
+	scale_delete_queries()
