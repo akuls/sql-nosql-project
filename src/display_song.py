@@ -30,10 +30,10 @@ import hdf5_getters
 import numpy as np
 import pickle
 
-XS_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b1_xs"
-S_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b2_s"
-M_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b3_m"
-L_PATH = "D:\Learning\Graduate\UMass\Course_content\Sem_2\DB\Project\Dataset\MillionSongSubset\\batch\\b4_l"
+XS_PATH = "../batch/b1_xs"
+S_PATH = "../batch/b2_s"
+M_PATH = "../batch/b3_m"
+L_PATH = "../batch/b4_l"
  
 def die_with_usage():
     """ HELP MENU """
@@ -154,14 +154,14 @@ def make_paths(filepath, fname, pickle_path):
 
 if __name__ == '__main__':
 
-    # print "XS"
-    # make_paths(XS_PATH, 'xs_files.txt', '..\data\\xs_song_data\\')
+     print "XS"
+     #make_paths(XS_PATH, 'xs_files.txt', '../data/xs_song_data')
     
-    # print "S"
-    # make_paths(S_PATH, 's_files.txt', '..\data\s_song_data\\')
+     print "S"
+     #make_paths(S_PATH, 's_files.txt', '../data/s_song_data')
     
-    # print "M"
-    # make_paths(M_PATH, 'm_files.txt', '..\data\m_song_data\\')
+     print "M"
+     #make_paths(M_PATH, 'm_files.txt', '../data/m_song_data')
     
-    print "L"
-    make_paths(L_PATH, 'l_files.txt', '..\data\l_song_data\\')
+     print "L"
+     make_paths(L_PATH, 'l_files.txt', '../data/l_song_data')
