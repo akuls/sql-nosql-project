@@ -234,16 +234,16 @@ def delete_queries(conn):
 def run_all_exp(conn, ID):
 	
 	res = []
-	# res = select_times(conn)
-	# res.append(update_times(conn))
+	#res = select_times(conn)
+	#res.append(update_times(conn))
 	#res = complex_join_times(conn)
-	#res = basic_joins(conn
+	#res = basic_joins(conn)
 	#res = max_queries(conn)
 	#res = min_queries(conn)
 	#res = avg_queries(conn)
 	#res = sum_queries(conn)
-	#res = count_queries(conn)
-	res = delete_queries(conn)
+	res = count_queries(conn)
+	#res = delete_queries(conn)
 
 	final_times.append(res)
 

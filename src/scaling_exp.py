@@ -158,7 +158,6 @@ def basic_queries(dbname):
 			print "Connected to DB successfully!"
 			res = select_times(conn)
 			res.append(update_times(conn))
-			#delete_times(conn)
 			
 			conn.commit()
 
@@ -218,8 +217,8 @@ def join_queries(dbname):
 
 		else:
 			print "Connected to DB successfully!"
-			#res = complex_join_times(conn)
-			res = basic_joins(conn)
+			res = complex_join_times(conn)
+			#res = basic_joins(conn)
 			conn.commit()
 
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -457,9 +456,9 @@ def scale_count_queries():
 
 def scale_aggregate_queries():
 
-	#scale_max_queries()
-	#scale_min_queries()
-	#scale_avg_queries()
+	scale_max_queries()
+	scale_min_queries()
+	scale_avg_queries()
 	scale_sum_queries()
 	scale_count_queries()
 
@@ -498,5 +497,10 @@ def scale_delete_queries():
 if __name__ == '__main__':
 	#scale_data_basic_queries()
 	#scale_data_join_queries()
+<<<<<<< HEAD
 	#scale_aggregate_queries()
 	scale_delete_queries()
+=======
+	scale_aggregate_queries()
+	#scale_delete_queries()
+>>>>>>> 171036c18b224b21dc588c5f638a2f52012bfbe9
