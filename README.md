@@ -1,1 +1,0 @@
-# sql-nosql-project
