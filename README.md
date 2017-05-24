@@ -2,7 +2,6 @@ Introduction:
 The objective of the project is to be able to explore and analyze the performance of SQL and NoSQL databases. This code is part of DB course project for the Spring 2017 semester. 
 
 Its members are:
-
 Akul Siddalingaswamy - https://github.com/akuls/
 Suraj Subraveti - https://github.com/suraj2495/
 
