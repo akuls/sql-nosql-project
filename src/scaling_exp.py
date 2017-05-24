@@ -497,5 +497,10 @@ def scale_delete_queries():
 if __name__ == '__main__':
 	#scale_data_basic_queries()
 	#scale_data_join_queries()
+<<<<<<< HEAD
+	#scale_aggregate_queries()
+	scale_delete_queries()
+=======
 	scale_aggregate_queries()
 	#scale_delete_queries()
+>>>>>>> 171036c18b224b21dc588c5f638a2f52012bfbe9
