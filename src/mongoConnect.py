@@ -82,12 +82,12 @@ def create_and_populate_collection(schema_path,db_name):
 
             #Dictionary of artistBasicInfo
             artistBasicInfo  = dict([('artist_name',masterDict['artist_name']),
-                            ('artist_familiarity',masterDict['artist_familiarity']),
-                            ('artist_hotttnesss',masterDict['artist_hotttnesss']),
+                            ('artist_familiarity',float(masterDict['artist_familiarity'])),
+                            ('artist_hotttnesss',float(masterDict['artist_hotttnesss'])),
                             ('artist_mbid',masterDict['artist_mbid']),
                             ('artist_id',masterDict['artist_id']),
-                            ('artist_latitude',masterDict['artist_latitude']),
-                            ('artist_longitude',masterDict['artist_longitude']),
+                            ('artist_latitude',float(masterDict['artist_latitude'])),
+                            ('artist_longitude',float(masterDict['artist_longitude'])),
                             ('artist_loction',masterDict['artist_location'])
                             ])
             #Dictionary of TrackID
@@ -103,25 +103,25 @@ def create_and_populate_collection(schema_path,db_name):
                             ('song_id',masterDict['song_id']),
                             ('release',masterDict['release']),
                             ('title',masterDict['title']),
-                            ('duration',masterDict['duration']),
+                            ('duration',float(masterDict['duration'])),
                             ('year',float(masterDict['year']))
                             ])
             
             #Dictionary of TrackTechInfo
             trackTechInfo  = dict([('track_id',masterDict['track_id']),
                             ('song_id',masterDict['song_id']),
-                            ('song_hotttnesss',masterDict['song_hotttnesss']),
-                            ('danceability',masterDict['danceability']),
-                            ('start_of_fade_out',masterDict['start_of_fade_out']),
-                            ('end_of_fade_in',masterDict['end_of_fade_in']),
-                            ('energy',masterDict['energy']),
+                            ('song_hotttnesss',float(masterDict['song_hotttnesss'])),
+                            ('danceability',float(masterDict['danceability'])),
+                            ('start_of_fade_out',float(masterDict['start_of_fade_out'])),
+                            ('end_of_fade_in',float(masterDict['end_of_fade_in'])),
+                            ('energy',float(masterDict['energy'])),
                             ('key',float(masterDict['key'])),
-                            ('key_confidence',masterDict['key_confidence']),
-                            ('loudness',masterDict['loudness']),
+                            ('key_confidence',float(masterDict['key_confidence'])),
+                            ('loudness',float(masterDict['loudness'])),
                             ('mode',float(masterDict['mode_confidence'])),
-                            ('tempo',masterDict['tempo']),
+                            ('tempo',float(masterDict['tempo'])),
                             ('time_signature',float(masterDict['time_signature'])),
-                            ('time_signature_confidence',masterDict['time_signature_confidence']),
+                            ('time_signature_confidence',float(masterDict['time_signature_confidence'])),
                             ('analysis_sample_rate',float(masterDict['analysis_sample_rate']))
                             ])
             
@@ -140,7 +140,8 @@ def create_and_populate_collection(schema_path,db_name):
             time_for_each_document.append((end-start).microseconds/1000.0)
 
     return time_for_each_document
-print "Time taken to populate schemas"
-populate_times = populate_mongo_schemas()
 
-print populate_times
+#print "Time taken to populate schemas"
+#populate_times = populate_mongo_schemas()
+
+#print populate_times

@@ -1,7 +1,7 @@
 import os
 import sys
-import psycopg2
-
+#import psycopg2
+'''
 def connect_to_db(dbname, user, host, pwd):
 	
 	db_string = "dbname=" + dbname + " user=" + user + " host=" + host + " password=" + pwd
@@ -12,4 +12,5 @@ def connect_to_db(dbname, user, host, pwd):
 	    return conn
 	except:
 		#print "No!"
-		return None
+                return None
+'''
